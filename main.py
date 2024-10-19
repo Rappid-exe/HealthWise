@@ -58,16 +58,17 @@ accuracy = metrics.accuracy_score(y_test, y_pred)
 print(f"Model Accuracy: {accuracy * 100:.2f}%")
 
 # GPT-based suggestion function
+# GPT-based suggestion function
 def get_gpt_suggestions(message):
-    response = openai.Completion.create(
-        model="gpt-4o",
-        prompt=message,
+    response = openai.ChatCompletion.create(
+        model="gpt-4o",  # or "gpt-4" if you have access
+        messages=[
+            {"role": "user", "content": message}
+        ],
         max_tokens=100,
-        n=1,
-        stop=None,
         temperature=0.7
     )
-    return response.choices[0].text.strip()
+    return response.choices[0].message['content'].strip()
 
 # Provide feedback based on accuracy
 if accuracy < 0.5:
