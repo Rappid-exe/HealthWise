@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 from sklearn import metrics
 
 # Example transaction data (dummy data for illustration)
@@ -23,8 +24,12 @@ category_mapping = {
 
 df['category_code'] = df['category'].map(category_mapping)
 
+# Normalize the 'amount' feature
+scaler = StandardScaler()
+df['amount_scaled'] = scaler.fit_transform(df[['amount']])
+
 # Features and target variable
-X = df[['category_code', 'amount']]  # Category and amount are the features
+X = df[['category_code', 'amount_scaled']]  # Category and scaled amount are the features
 y = df['premium_adjustment']  # The target variable is the premium adjustment
 
 # Split data into training and testing sets
@@ -48,7 +53,13 @@ def predict_premium_adjustment(category, amount):
     category_code = category_mapping.get(category, -1)
     if category_code == -1:
         return "Unknown category"
-    return clf.predict([[category_code, amount]])[0]
+    
+    # Scale the amount to match the trained model's input format
+    amount_scaled = scaler.transform([[amount]])[0][0]
+    
+    # Create a DataFrame with proper feature names for prediction
+    input_data = pd.DataFrame([[category_code, amount_scaled]], columns=['category_code', 'amount_scaled'])
+    return clf.predict(input_data)[0]
 
 # Example usage
 new_transaction = {
