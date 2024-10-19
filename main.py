@@ -3,6 +3,10 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn import metrics
+import openai
+
+# Your OpenAI API key
+openai.api_key = 'your_openai_api_key'
 
 # Example transaction data (dummy data for illustration)
 data = {
@@ -48,6 +52,28 @@ y_pred = clf.predict(X_test)
 accuracy = metrics.accuracy_score(y_test, y_pred)
 print(f"Model Accuracy: {accuracy * 100:.2f}%")
 
+# GPT-based suggestion function
+def get_gpt_suggestions(message):
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt=message,
+        max_tokens=100,
+        n=1,
+        stop=None,
+        temperature=0.7
+    )
+    return response.choices[0].text.strip()
+
+# Provide feedback based on accuracy
+if accuracy < 0.5:
+    feedback_prompt = "My decision tree model performed poorly with an accuracy of {:.2f}. Can you suggest ways to improve it?".format(accuracy * 100)
+    suggestion = get_gpt_suggestions(feedback_prompt)
+    print("Suggestion from GPT to improve the model:\n", suggestion)
+else:
+    appreciation_prompt = "My decision tree model performed well with an accuracy of {:.2f}. Please provide some positive feedback.".format(accuracy * 100)
+    appreciation = get_gpt_suggestions(appreciation_prompt)
+    print("Appreciation from GPT:\n", appreciation)
+
 # Example function to predict premium adjustment for a new transaction
 def predict_premium_adjustment(category, amount):
     category_code = category_mapping.get(category, -1)
@@ -69,3 +95,13 @@ new_transaction = {
 
 predicted_adjustment = predict_premium_adjustment(new_transaction['category'], new_transaction['amount'])
 print(f"Predicted premium adjustment: {predicted_adjustment}%")
+
+# Feedback on premium adjustment
+if predicted_adjustment > 0:
+    improvement_prompt = "The premium adjustment is {:.2f}%. What can I do to improve my financial health?".format(predicted_adjustment)
+    suggestion = get_gpt_suggestions(improvement_prompt)
+    print("Suggestion from GPT:\n", suggestion)
+else:
+    positive_feedback_prompt = "The premium adjustment is {:.2f}%. Please provide positive feedback on my spending behavior.".format(predicted_adjustment)
+    appreciation = get_gpt_suggestions(positive_feedback_prompt)
+    print("Appreciation from GPT:\n", appreciation)
