@@ -106,8 +106,8 @@ print(f"Predicted premium adjustment: {predicted_adjustment}%")
 if predicted_adjustment > 0:
     improvement_prompt = "The premium adjustment is {:.2f}%. What can I do to improve my financial health?".format(predicted_adjustment)
     suggestion = get_gpt_suggestions(improvement_prompt)
-    print("Suggestion from GPT:\n", suggestion)
+    print("Suggestion from HeathWise:\n", suggestion)
 else:
     positive_feedback_prompt = "The premium adjustment is {:.2f}%. Please provide positive feedback on my spending behavior.".format(predicted_adjustment)
     appreciation = get_gpt_suggestions(positive_feedback_prompt)
-    print("Appreciation from GPT:\n", appreciation)
+    print("Appreciation from HeathWise:\n", appreciation)
