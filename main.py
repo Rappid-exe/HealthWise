@@ -63,6 +63,8 @@ def get_gpt_suggestions(message):
     response = openai.ChatCompletion.create(
         model="gpt-4o",  # or "gpt-4" if you have access
         messages=[
+            {"role": "user", "content": message}
+        ],
         max_tokens=100,
         temperature=0.7
     )
