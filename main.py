@@ -60,7 +60,7 @@ print(f"Model Accuracy: {accuracy * 100:.2f}%")
 # GPT-based suggestion function
 def get_gpt_suggestions(message):
     response = openai.Completion.create(
-        model="text-davinci-003",
+        model="gpt-4o",
         prompt=message,
         max_tokens=100,
         n=1,
