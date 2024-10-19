@@ -4,9 +4,14 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn import metrics
 import openai
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Your OpenAI API key
-openai.api_key = 'your_openai_api_key'
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 # Example transaction data (dummy data for illustration)
 data = {
